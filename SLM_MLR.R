@@ -8,6 +8,7 @@ dat <- read.csv("~/Desktop/R_Workshop/R Workshop Day3/Data.csv")
 # View the structure of the data before conversion
 str(dat)
 
+### We now want to change some of the variables to numeric and factors
 
 # Convert the SEX variable to a factor with labels "Male" and "Female"
 dat$SEX <- factor(dat$SEX, levels = c(0, 1), labels = c("Male", "Female"))
@@ -16,15 +17,6 @@ dat$SEX <- factor(dat$SEX, levels = c(0, 1), labels = c("Male", "Female"))
 dat$LANGUAGE <- factor(dat$LANGUAGE, levels = c(0, 1), labels = c("Primary", "Secondary"))
 
 # View the structure of the data after conversion
-str(dat)
-
-# Save the modified data
-write.csv(dat, "~/Desktop/R_Workshop/R Workshop Day3/modified_Data.csv", row.names = FALSE)
-
-# Load the modified data
-dat <- read.csv("~/Desktop/R_Workshop/R Workshop Day3/modified_Data.csv")
-
-# Check the structure of the new data frame
 str(dat)
 
 # Save the modified dataset to a new CSV file
@@ -37,7 +29,6 @@ str(dat)
 
 # Display the data frame
 print(dat)
-
 
 
 # Taking a look at the Data structure
