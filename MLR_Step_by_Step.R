@@ -67,6 +67,8 @@ str(dat_cleaned)
 # and Science Knowledge (SCI_KNOWLEDGE) with Science Literacy 
 # (STU_SCI_LITERACY).
 
+
+
 # Science Literacy = B0 + B1(HOUSE_POS) + B2(ENV_AWARENESS) + 
 # B3(STU_SCI_LITERACY)
 
