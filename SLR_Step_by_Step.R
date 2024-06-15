@@ -44,6 +44,8 @@ setwd("/Users/kensuzuki/Desktop/R_Workshop/R Workshop Day3")
 
 
 # Or you can use "~" to shortcut the file path.
+
+
 # It works on Windows and Mac.
 setwd("~/Desktop/R_Workshop/R Workshop Day3")
 
@@ -67,7 +69,7 @@ head(dat)
 # dat.
 
 head(dat, 10)
-tail(dat, 11)
+tail(dat, 10)
 str(dat)
 
 
@@ -98,7 +100,7 @@ summary(dat$WEALTH)
 # of the variable "STU_SCI_LITERACY" (Student's Science 
 # Literacy Scores) our outcome variable.
 
-
+summary(dat$STU_SCI_LITERACY)
 # (Your code here)
 
 
@@ -136,14 +138,14 @@ min_max_range <- max_score - min_score
 print(min_max_range)
 
 # ---------------------------------------------------------
-## Task 2 ## (Review of Day 1)
+## Task 2.1 ## (Review of Day 1)
 
-# Let's calculate the 1st and 3rd Quantile range AKA the
-# Inter Quartile Range (middle 50%) of the student's 
-# science literacy scores.
+# Let's calculate the 1st and 3rd Quartile range AKA the
+# Inter Quartile Range (IQR: middle 50%) of the student's 
+# science literacy scores. Please ensure to assign an 
+# "object" per each value so that your final equation is: 
+# "IQR = Q3 - Q1"
 
-# Please ensure to assign an "object" per each value so that 
-# your final equation is: "Q3 - Q1"
 
 # STU_SCI_LITERACY Summary:
 # Min.   1st Qu.  Median   Mean   3rd Qu. Max. 
@@ -154,46 +156,75 @@ print(min_max_range)
 # Store the 1st Quartile value and the 3rd Quartile value 
 # as objects, Q1 and Q3 using "<-" operator.
 
+Q1 <- 353.6
+Q3 <- 458.5
+# (Your code here)
+
 
 ## Second step:
-# Obtain the IQR by subtracting Q1 from Q3 and assign the 
-# the name "IQR_score" with "<-" operator and print 
-# the score at the end.
+# Obtain the IQR by subtracting Q1 from Q3 and store the 
+# result as an object called "IQR_score" using "<-" assign 
+# operator.
 
+IQR_score <- Q3 - Q1
 # (Your code here):
 
+
+## Third step:
+# Check the result using print() function.
+
 print(IQR_score)
+# (Your code here):
+
 
 # Let's confirm if your answer is correct. R has the built-in
-# function "IQR()" to calculate the IQ range (LOL).
+# function "IQR()" to calculate the IQR (LOL).
+
 
 IQR(dat$STU_SCI_LITERACY)
 # ---------------------------------------------------------
 
 
-### My interpretation of the Quantiles: ###
-
+### My Interpretation of the Inter Quartile Range: ###
 # If the IQR (Middle 50%) is large relative to the range of 
-# scores, it indicates that the scores are spread out 
-# over a wide range. 
+# scores, it indicates that the scores in the data are 
+# spread out over a wide range. 
 
 
 ### My interpretation of the summary: Mean & Median ###
-
 # - The mean score is 408.0
 # - The median score is 394.6
 
-# If the median is less than the mean, the tail is longer 
-# on the right side. Therefore, the distribution is positively
-# skewed (The distribution has more lower scores).
+# The median is less than the mean, which indicates that the
+# distribution of the scores is positively skewed. This means
+# that the distribution has more lower scores.
 
-# Let's confirm this by plotting a histogram
 
-hist(dat$STU_SCI_LITERACY) # Review from day 2
+#### How to plot a simple Histogram ####
+# If you are unsure about the distribution of the data, you
+# may plot a histogram to visualize the distribution of the
+# data.
 
+
+# ---------------------------------------------------------
+## Task 2.2 ##
+# Create a histogram of the student's science literacy scores
+# using the hist() function.
+
+
+# The structure of the code is simple:
+# hist(your_data$variable_name)
+
+
+# (Your code here): 
+hist(dat$STU_SCI_LITERACY) 
+
+
+#----------------------------------------------------------
+
+# Contining on with the Descriptive Statistics...
 
 ### The other options for Descriptive Statistics: ###
-
 # Use describe() function from the "psych" package to get more 
 # detailed statistics. (Review from Day 2)
 
@@ -209,21 +240,33 @@ library(psych)
 # Descriptive statistics of the entire dataset
 describe(dat)
 
+# Some insights from the output:
 
-# If you have a specific variable(s) in mind, use $ syntax
-# to specify the variable name.
+# Trimmed (mean) display values with the top and bottom 10% 
+# of the data are removed before calculating the mean. 
+# Compare the mean and trimmed mean to see if there are
+# outliers in the data.
+
+# The mad stands for the median absolute deviation. 
+# It is a robust measure of the variability of the data and
+# less sensitive to outliers compared to the Standard 
+# Deviation. Therefore, both parameters help indicate 
+# the outliers in the data.
+
+
+# When you want to take a close look at just one variable:
+# Use $ syntax to specify the variable name with describe()
+# function.
 describe(dat$WEALTH) 
 
 
-# Another Methods to get descriptive statistics
-
+### Use of describeBy() (Review from Day 2) ###
 
 # Use "describeBy()" function to get descriptive statistics 
-# by a specific group. (Review from Day 2)
+# by a specific group (factor variable). 
 
 # In this case, I want to group by SEX variable in my dataset.
 # Use "group = " to specify what variable you want to group by.
-
 
 describeBy(dat, group = dat$SEX)
 
@@ -232,15 +275,24 @@ describeBy(dat, group = dat$SEX)
 # the order  
 
 
-# I want to change order of the group to Male and Female
+# Let's say you want smaller group (Male) shown first and
+# larger group (Female) shown second. 
 dat$SEX <- factor(dat$SEX, levels = c("Male", "Female"))  
-# or any order you prefer
+
+str(dat)
+
+describeBy(dat, group = dat$SEX)
+
+# Let's reverse the order to Female and Male by 
+# changing back the variable type to Character again.
+
+dat$SEX <- as.character(dat$SEX)
+str(dat)
+describeBy(dat, group = dat$SEX)
 
 
 # ---------------------------------------------------------
 ## Task 3 ## (Review of Day 2)
-
-# Using the example shown above 
 
 # Drawing from the previous example, group the descriptive
 # statistics by the variable "REPEAT".
@@ -293,9 +345,9 @@ str(dat)
 # install.packages("dplyr") # if you haven't done so
 library(dplyr)
 
-dat_cleaned <- dat %>% 
-  rename(LANGUAGE = ST022Q01TA)
-
+# Change the variable name to "LANGUAGE" using the 
+# pipe operator and "rename()" function.
+dat_cleaned <- dat %>% rename(LANGUAGE = ST022Q01TA)
 
 # Check the outcome of the new dataset "dat_cleaned"
 str(dat_cleaned)
@@ -346,29 +398,31 @@ str(dat_cleaned)
 ## Task 3.1 ##
 # Following the example above, change the REPEAT variable to
 # a numeric variable and save it under the name num_REPEAT.
-
 dat_cleaned <- dat_cleaned %>% 
   mutate(num_REPEAT = as.numeric(REPEAT))
 
-# Check the outcome
 # (Your code here)
 
 
-# Check the outcome
+# Check the outcome: Use str() function
 str(dat_cleaned)
 
+
 ## Task 3.2 ##
-# Change SEX variable and LANGUAGE variable to a factor with 
-# pipe operator and mutate function and OVERWRITE the existing
-# variables.
+# Change SEX variable and LANGUAGE variable together to 
+# factor variables using pipe operators and the mutate() 
+# function.
 
 # The structure of the mutate function is:
 # mutate(new_variable_name = as.factor(old_variable_name))
-
+# Leave the variable names as their original names.
 
 dat_cleaned <- dat_cleaned %>% 
   mutate(SEX = as.factor(SEX),
          LANGUAGE = as.factor(LANGUAGE))
+
+
+#(Your code here)
 
 
 # Check the outcome
@@ -425,87 +479,61 @@ str(dat_cleaned)
 # variables of interest: WEALTH and STU_SCI_LITERACY.
 
 
-# Using pipe operators:
-# Fist, you identify the dataset you reference. 
-# Next use select() the variables of interest. Finally, use the
-# describe() function to get the summary statistics.
+### MANY WAYS TO WRITE CODE - DEMONSTRATION ###
 
-dat_cleaned %>% 
-  select(WEALTH, STU_SCI_LITERACY) %>% 
-  describe()
-
-
-# Use describe() for WEALTH and STU_SCI_LITERACY individually.
+# 1) WEALTH and STU_SCI_LITERACY individually.
 describe(dat_cleaned$WEALTH)
 describe(dat_cleaned$STU_SCI_LITERACY)
 
 
-# You can combine them together as this
+# 2) Combine them together with c() function [Traditional]. 
 describe(dat_cleaned[,c("WEALTH", "STU_SCI_LITERACY")])
 
 
+# 3) Using pipe operators:
+# Fist, you identify the dataset you reference. 
+# Next use select() & the variables of interest. 
+# Finally, use the describe() function to get the 
+# summary statistics.
 
-# Check for correlation between WEALTH and STU_SCI_LITERACY
-cor(dat_cleaned$WEALTH, dat_cleaned$STU_SCI_LITERACY)
 
-# Quick way to make a correlation matrix.
-# Ensure that the variables are numeric.
 dat_cleaned %>% 
   select(WEALTH, STU_SCI_LITERACY) %>% 
-  cor()
+  describe() # describe() is a psych package function.
 
 
-# A simple scatter plot (Y = WEALTH, Y = STU_SCI_LITERACY)
-plot(dat_cleaned$WEALTH, dat_cleaned$STU_SCI_LITERACY)
+#### Desnity Plot, Scatter Plot, And Correlation ####
+# (My explanation here.)
 
 
-# A simple scatter plot with pipe operator
-dat_cleaned %>% 
-  select(WEALTH, STU_SCI_LITERACY) %>% 
-  plot()
-
-
-# Scatter plot using ggplot2 
-library(ggplot2)
-
-# Create a scatter plot with ggplot2 (Y = WEALTH, Y = STU_SCI_LITERACY)
-
-# The ggplot2 package is a popular function for data 
-# visualization. The base structure of the ggplot2 function is
-# ggplot(data = dataset, aes(x = x_variable, y = y_variable)).
-# Using "+" symbol to add layers to the plot.
-
-# Let's make a scatter plot to see the correlation of X and Y.
-
-ggplot(dat_cleaned, aes(x = WEALTH, y = STU_SCI_LITERACY)) + 
-  geom_point() + 
-  labs(title = "WEALTH and STU_SCI_LITERACY",
-       x = "WEALTH",
-       y = "STU_SCI_LITERACY") 
-
-# aes() function is used to specify the x and y variables.
-# geom_point() function is to create a scatter plot.
-# labs() function is to add title and axis labels.
 
 
 # I often use the GGally package to create a scatter plot matrix
 # This package will create a scatter plot matrix with Density
 # plot, Scatter plot, and Correlation.
 
-# Use GGally package to create a scatter plot matrix
+
+# Use ggplot2 and GGally package to create a scatter plot matrix
+library(ggplot2)
 library(GGally)
 
 
 # Create a scatter plot matrix with pipe operator
-dat_cleaned %>% 
-  select(WEALTH, STU_SCI_LITERACY) %>% # Select the variables
-  ggpairs() # Create a scatter plot matrix
 
+dat_cleaned %>%
+  select(WEALTH, STU_SCI_LITERACY) %>%
+  ggpairs()
 
-# What to look for in the plots
-# 1) The relationship between the variables
+# check the correlation between WEALTH and STU_SCI_LITERACY
+st(dat_cleaned)
+
+# What to look for in the Matrix:
+# 1) The relationship between the variables 
 # 2) The distribution of the variables
 # 3) The correlation between the variables
+# 4) Watch for multicollinearity 
+# (if two or more IVs are highly correlated).
+
 
 # Strength of correlation:
 # 0.1 - 0.3: Weak
@@ -513,6 +541,37 @@ dat_cleaned %>%
 # 0.5 - 1.0: Strong
 
 
+
+#---------------------------------------------------------
+## Task 4.1 ##
+# Let's have some fun with visualization. Drawing from the
+# GGally example, please create a matrix with the following 
+# variables: WEALTH, SEX, STU_SCI_LITERACY, and HOME_POS.
+# Please note, you may need to change the size of the "Plots"
+# window to see the entire matrix. 
+dat_cleaned %>% 
+  select(WEALTH, SEX, STU_SCI_LITERACY,HOUSE_POS) %>%
+  ggpairs()
+# (Your code here)
+
+
+## Task 4.2 ##
+# Provide your interpretation of the correlation between the 
+# HOUSE_POS (rate of possessions for 16 critical household 
+# items) and WEALTH variables. Ensure to describe 
+# the charts (Correlation and a scatter plot).
+
+
+# (Your interpretation here)
+
+
+## Task 4.3 ##
+# How would you interpret the cell between SEX and WEALTH?
+
+
+# (Your interpretation here)
+
+#---------------------------------------------------------
 
 
 
@@ -692,21 +751,7 @@ ggplot(dat_cleaned, aes(x = WEALTH, y = STU_SCI_LITERACY)) +
        y = "Science Literacy") +
   theme_minimal()
 
-# What is the least-squares regression line?
-# The least-squares regression line is the line that minimizes
-# the sum of the squared differences between the observed
-# values and the predicted values. It is the line that best
-# fits the data in terms of minimizing the sum of squared
-# residuals.
 
-# The gray shadow around the regression line in your plot 
-# represents the confidence interval for the regression line. 
-
-# The shadow indicates the uncertainty around the estimated 
-# regression line; a wider shadow suggests greater uncertainty 
-# about the true position of the line. The confidence interval 
-# is influenced by factors such as the variability of the data 
-# and the sample size.
 
 
 ##### Step 8: Model Diagnostics #####
